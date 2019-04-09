@@ -7,7 +7,7 @@ import App from "./components/App";
 
 render(
   <Router>
-    <App />;
+    <App />
   </Router>,
   document.getElementById("app")
 );
