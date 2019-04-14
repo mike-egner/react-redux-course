@@ -4,8 +4,6 @@ import * as courseActions from "../../redux/actions/courseActions";
 import PropTypes from "prop-types";
 import { bindActionCreators } from "redux";
 
-//testing gitHub issue
-
 class CoursesPage extends React.Component {
   render() {
     return (
