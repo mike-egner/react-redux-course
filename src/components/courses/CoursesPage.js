@@ -5,6 +5,12 @@ import PropTypes from "prop-types";
 import { bindActionCreators } from "redux";
 
 class CoursesPage extends React.Component {
+  componentDidMount() {
+    this.props.actions.loadCourses().catch(error => {
+      alert("Loading courses failed " + error);
+    });
+  }
+
   render() {
     return (
       // wrapping in a JSX fragment so that there is one top-level component (required for JSX)
@@ -20,7 +26,7 @@ class CoursesPage extends React.Component {
 
 CoursesPage.propTypes = {
   courses: PropTypes.array.isRequired,
-  actions: PropTypes.func.isRequired
+  actions: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
