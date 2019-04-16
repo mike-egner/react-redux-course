@@ -11,6 +11,7 @@ function ManageCoursePage({
   courses,
   loadAuthors,
   loadCourses,
+  saveCourse,
   ...props
 }) {
   const [course, setCourse] = useState({ ...props.course });
@@ -38,6 +39,11 @@ function ManageCoursePage({
     }));
   }
 
+  function handleSave(event) {
+    event.preventDefault();
+    saveCourse(course);
+  }
+
   return (
     // wrapping in a JSX fragment so that there is one top-level component (required for JSX)
     <>
@@ -46,6 +52,7 @@ function ManageCoursePage({
         errors={errors}
         authors={authors}
         onChange={handleChange}
+        onSave={handleSave}
       />
     </>
   );
@@ -56,7 +63,8 @@ ManageCoursePage.propTypes = {
   course: PropTypes.object.isRequired,
   courses: PropTypes.array.isRequired,
   loadAuthors: PropTypes.func.isRequired,
-  loadCourses: PropTypes.func.isRequired
+  loadCourses: PropTypes.func.isRequired,
+  saveCourse: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -69,7 +77,8 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = {
   loadCourses: courseActions.loadCourses,
-  loadAuthors: authorActions.loadAuthors
+  loadAuthors: authorActions.loadAuthors,
+  saveCourse: courseActions.saveCourse
 };
 
 export default connect(
