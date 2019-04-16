@@ -30,10 +30,23 @@ function ManageCoursePage({
     }
   }, []);
 
+  function handleChange(event) {
+    const { name, value } = event.target;
+    setCourse(prevCourse => ({
+      ...prevCourse,
+      [name]: name === "authorId" ? parseInt(value, 10) : value
+    }));
+  }
+
   return (
     // wrapping in a JSX fragment so that there is one top-level component (required for JSX)
     <>
-      <CourseForm course={course} errors={errors} authors={authors} />
+      <CourseForm
+        course={course}
+        errors={errors}
+        authors={authors}
+        onChange={handleChange}
+      />
     </>
   );
 }
