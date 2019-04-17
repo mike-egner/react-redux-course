@@ -19,11 +19,12 @@ function ManageCoursePage({
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    debugger;
     if (courses.length === 0) {
       loadCourses().catch(error => {
         alert("Loading courses failed " + error);
       });
+    } else {
+      setCourse({ ...props.course });
     }
 
     if (authors.length === 0) {
@@ -31,7 +32,7 @@ function ManageCoursePage({
         alert("Loading authors failed " + error);
       });
     }
-  }, []);
+  }, [props.course]);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -78,8 +79,10 @@ export function getCourseBySlug(courses, slug) {
 
 function mapStateToProps(state, ownProps) {
   const slug = ownProps.match.params.slug;
-  debugger;
-  const course = slug ? getCourseBySlug(state.courses, slug) : newCourse;
+  const course =
+    slug && state.courses.length > 0
+      ? getCourseBySlug(state.courses, slug)
+      : newCourse;
   return {
     authors: state.authors,
     course,
