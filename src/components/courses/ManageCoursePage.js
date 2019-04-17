@@ -11,6 +11,7 @@ function ManageCoursePage({
   courses,
   loadAuthors,
   loadCourses,
+  history,
   saveCourse,
   ...props
 }) {
@@ -18,6 +19,7 @@ function ManageCoursePage({
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
+    debugger;
     if (courses.length === 0) {
       loadCourses().catch(error => {
         alert("Loading courses failed " + error);
@@ -41,7 +43,9 @@ function ManageCoursePage({
 
   function handleSave(event) {
     event.preventDefault();
-    saveCourse(course);
+    saveCourse(course).then(() => {
+      history.push("/courses");
+    });
   }
 
   return (
@@ -62,15 +66,23 @@ ManageCoursePage.propTypes = {
   authors: PropTypes.array.isRequired,
   course: PropTypes.object.isRequired,
   courses: PropTypes.array.isRequired,
+  history: PropTypes.object.isRequired,
   loadAuthors: PropTypes.func.isRequired,
   loadCourses: PropTypes.func.isRequired,
   saveCourse: PropTypes.func.isRequired
 };
 
-function mapStateToProps(state) {
+export function getCourseBySlug(courses, slug) {
+  return courses.find(course => course.slug === slug) || null;
+}
+
+function mapStateToProps(state, ownProps) {
+  const slug = ownProps.match.params.slug;
+  debugger;
+  const course = slug ? getCourseBySlug(state.courses, slug) : newCourse;
   return {
     authors: state.authors,
-    course: newCourse,
+    course,
     courses: state.courses
   };
 }
