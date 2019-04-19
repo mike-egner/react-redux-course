@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import { newCourse } from "../../../tools/mockData";
 import CourseForm from "./CourseForm";
 import Spinner from "../common/Spinner";
+import { toast } from "react-toastify";
 
 function ManageCoursePage({
   authors,
@@ -48,6 +49,7 @@ function ManageCoursePage({
     event.preventDefault();
     setSaving(true);
     saveCourse(course).then(() => {
+      toast.success("Course saved.");
       history.push("/courses");
     });
   }
