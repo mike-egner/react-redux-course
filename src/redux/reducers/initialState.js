@@ -1,1 +1,1 @@
-export default { courses: [], authors: [] };
+export default { courses: [], authors: [], apiCallsInProgress: 0 };
