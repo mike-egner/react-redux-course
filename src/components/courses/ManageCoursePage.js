@@ -48,7 +48,7 @@ export function ManageCoursePage({
   function formIsValid() {
     const { title, authorId, category } = course;
     const errors = {};
-    debugger;
+    //debugger;
     if (!title) errors.title = "Title is required.";
     if (!authorId) errors.author = "Author is required.";
     if (!category) errors.category = "Category is required.";

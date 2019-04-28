@@ -75,7 +75,7 @@ CoursesPage.propTypes = {
 };
 
 function mapStateToProps(state) {
-  debugger;
+  //debugger;
   return {
     courses:
       state.authors.length === 0
