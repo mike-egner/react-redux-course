@@ -74,18 +74,18 @@ export function ManageCoursePage({
 
   return authors.length === 0 || courses.length === 0 ? (
     <Spinner />
+  ) : // wrapping in a JSX fragment so that there is one top-level component (required for JSX)
+  props.invalidSlug ? (
+    <h1>Sorry, that course does not exist.</h1>
   ) : (
-    // wrapping in a JSX fragment so that there is one top-level component (required for JSX)
-    <>
-      <CourseForm
-        course={course}
-        errors={errors}
-        authors={authors}
-        onChange={handleChange}
-        onSave={handleSave}
-        saving={saving}
-      />
-    </>
+    <CourseForm
+      course={course}
+      errors={errors}
+      authors={authors}
+      onChange={handleChange}
+      onSave={handleSave}
+      saving={saving}
+    />
   );
 }
 
@@ -94,6 +94,7 @@ ManageCoursePage.propTypes = {
   course: PropTypes.object.isRequired,
   courses: PropTypes.array.isRequired,
   history: PropTypes.object.isRequired,
+  invalidSlug: PropTypes.object.isRequired,
   loadAuthors: PropTypes.func.isRequired,
   loadCourses: PropTypes.func.isRequired,
   saveCourse: PropTypes.func.isRequired
@@ -109,10 +110,12 @@ function mapStateToProps(state, ownProps) {
     slug && state.courses.length > 0
       ? getCourseBySlug(state.courses, slug)
       : newCourse;
+  const invalidSlug = course === null;
   return {
     authors: state.authors,
     course,
-    courses: state.courses
+    courses: state.courses,
+    invalidSlug
   };
 }
 
