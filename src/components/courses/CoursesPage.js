@@ -80,12 +80,23 @@ function mapStateToProps(state) {
     courses:
       state.authors.length === 0
         ? []
-        : state.courses.map(course => {
-            return {
-              ...course,
-              authorName: state.authors.find(x => x.id === course.authorId).name
-            };
-          }),
+        : state.courses
+            .map(course => {
+              return {
+                ...course,
+                authorName: state.authors.find(x => x.id === course.authorId)
+                  .name
+              };
+            })
+            .sort((a, b) => {
+              if (a.title < b.title) {
+                return -1;
+              }
+              if (a.title > b.title) {
+                return 1;
+              }
+              return 0;
+            }),
     authors: state.authors,
     loading: state.apiCallsInProgress > 0
   };
