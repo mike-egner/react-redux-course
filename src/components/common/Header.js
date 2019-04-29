@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
 const Header = ({ coursesTotal }) => {
   const activeStyle = { color: "#F15B2A" };
@@ -27,6 +28,10 @@ const Header = ({ coursesTotal }) => {
       </span>
     </nav>
   );
+};
+
+Header.propTypes = {
+  coursesTotal: PropTypes.number.isRequired
 };
 
 function mapStateToProps(state) {
