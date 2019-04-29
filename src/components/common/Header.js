@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 
 const Header = ({ coursesTotal }) => {
   const activeStyle = { color: "#F15B2A" };
-  debugger;
+  //debugger;
   return (
     <nav className="navbar navbar-light bg-light py-3">
       <div>
