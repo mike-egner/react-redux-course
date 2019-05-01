@@ -8,11 +8,58 @@ import CourseList from "./CourseList";
 import { Redirect } from "react-router-dom";
 import Spinner from "../common/Spinner";
 import { toast } from "react-toastify";
+import Dropdown from "react-bootstrap/Dropdown";
 
 class CoursesPage extends React.Component {
   state = {
-    redirectToAddCoursePage: false
+    redirectToAddCoursePage: false,
+    sortType: 0
   };
+
+  sortTypes = [
+    {
+      displayName: "Sort",
+      sortOn: false,
+      sortField: null,
+      sortDescending: null
+    },
+    {
+      displayName: "Title A-Z",
+      sortOn: true,
+      sortField: "title",
+      sortDescending: true
+    },
+    {
+      displayName: "Title Z-A",
+      sortOn: true,
+      sortField: "title",
+      sortDescending: false
+    },
+    {
+      displayName: "Author A-Z",
+      sortOn: true,
+      sortField: "authorName",
+      sortDescending: true
+    },
+    {
+      displayName: "Author Z-A",
+      sortOn: true,
+      sortField: "authorName",
+      sortDescending: false
+    },
+    {
+      displayName: "Category A-Z",
+      sortOn: true,
+      sortField: "category",
+      sortDescending: true
+    },
+    {
+      displayName: "Category Z-A",
+      sortOn: true,
+      sortField: "category",
+      sortDescending: false
+    }
+  ];
 
   componentDidMount() {
     const { courses, authors, actions } = this.props;
@@ -39,24 +86,53 @@ class CoursesPage extends React.Component {
     }
   };
 
+  handleSortClick = choice => this.setState({ sortType: choice });
+
   render() {
     return (
       // wrapping in a JSX fragment so that there is one top-level component (required for JSX)
       <>
         {this.state.redirectToAddCoursePage && <Redirect to="/course/" />}
-        <h2>Courses</h2>
+        <h2 className="pt-2">Courses</h2>
         {this.props.loading ? (
           <Spinner />
         ) : (
           <>
-            <button
-              style={{ marginBottom: 20 }}
-              className="btn btn-primary add-course"
-              onClick={() => this.setState({ redirectToAddCoursePage: true })}
-            >
-              Add Course
-            </button>
+            <div className="row justify-content-between px-3 py-2">
+              <span>
+                <button
+                  style={{ marginBottom: 20 }}
+                  className="btn btn-primary add-course"
+                  onClick={() =>
+                    this.setState({ redirectToAddCoursePage: true })
+                  }
+                >
+                  Add Course
+                </button>
+              </span>
+              <span className="dropdown">
+                <Dropdown>
+                  <Dropdown.Toggle variant="info" id="dropdown-basic">
+                    {this.sortTypes[this.state.sortType].displayName}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    {this.sortTypes.map((item, index) => {
+                      return (
+                        <Dropdown.Item
+                          key={item.displayName}
+                          href="#"
+                          onClick={() => this.handleSortClick(index)}
+                        >
+                          {item.displayName}
+                        </Dropdown.Item>
+                      );
+                    })}
+                  </Dropdown.Menu>
+                </Dropdown>
+              </span>
+            </div>
             <CourseList
+              {...this.sortTypes[this.state.sortType]}
               onDeleteClick={this.handleDeleteCourse}
               courses={this.props.courses}
             />
@@ -75,28 +151,16 @@ CoursesPage.propTypes = {
 };
 
 function mapStateToProps(state) {
-  //debugger;
   return {
     courses:
       state.authors.length === 0
         ? []
-        : state.courses
-            .map(course => {
-              return {
-                ...course,
-                authorName: state.authors.find(x => x.id === course.authorId)
-                  .name
-              };
-            })
-            .sort((a, b) => {
-              if (a.title < b.title) {
-                return -1;
-              }
-              if (a.title > b.title) {
-                return 1;
-              }
-              return 0;
-            }),
+        : state.courses.map(course => {
+            return {
+              ...course,
+              authorName: state.authors.find(x => x.id === course.authorId).name
+            };
+          }),
     authors: state.authors,
     loading: state.apiCallsInProgress > 0
   };
